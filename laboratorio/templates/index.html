@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Aplicación para prestamo de Laboratorio</h1>
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Añadir equipo</h3>
+      <p>
+
+        <form id="f1" name="f1" method="post">
+            Nombre de equipo: <input name="nombre" id="nombre" />
+            <br>
+            Descripcion: <input name="descripcion" id="descripcion" />
+
+            {% csrf_token %} 
+                        <button type="submit">Enviar</button>
+        </form>
+
+      </p>
+    </div>
+    <script>
+$("#f1").submit( function() {
+  
+  $.ajax({
+    method:'POST',
+    url:'{% url "guardarEquipo" %}',
+    data:{
+      nombre: $('#nombre').val(),
+      descripcion:  $('#descripcion').val(),
+      csrfmiddlewaretoken: '{{ csrf_token }}'
+
+  }, 
+  success: function(response) {
+      alert('agregado correctamente');
+  },
+  }); 
+
+
+} );
+
+</script>
+    <div class="col-sm-4">
+      <h3>Listado de equipos</h3>
+       
+
+            {% for equipo in equipos %}
+            <p>
+              {{ equipo.nombre }} <a href="eliminarEquipo/{{equipo.id}}"> ¿Eliminar?</a>
+            </p>
+            {% endfor %}
+       
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
